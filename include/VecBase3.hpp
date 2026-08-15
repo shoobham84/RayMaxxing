@@ -16,17 +16,17 @@ public:
 	constexpr VecBase3(value_type x, value_type y, value_type z)
 	: m_Data{ x, y, z } {}
 
-	[[nodiscard]] value_type x() const {
+	[[nodiscard]] constexpr value_type x() const noexcept {
 		return m_Data[0]; 
 	}
-	[[nodiscard]] value_type y() const {
+	[[nodiscard]] constexpr value_type y() const noexcept {
 		return m_Data[1];
 	}
-	[[nodiscard]] value_type z() const { 
+	[[nodiscard]] constexpr value_type z() const noexcept { 
 		return m_Data[2];
 	}
 
-	[[nodiscard]] constexpr value_type& operator[](size_t _index) const {
+	[[nodiscard]] constexpr const value_type& operator[](size_t _index) const {
 		assert(_index < m_DataSize && "Index out of bounds");
 		return m_Data[_index];
 	}
@@ -40,6 +40,7 @@ public:
 
 private:
 	constexpr static size_t m_DataSize{ 3 };
+
 	std::array<value_type, m_DataSize> m_Data{ 
 		static_cast<value_type>(0),
 		static_cast<value_type>(0),
