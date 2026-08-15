@@ -36,6 +36,8 @@ public:
 		return m_Data[_index];
 	}
 
+	[[nodiscard]] bool operator==(const VecBase3<value_type>& other) const noexcept = default;
+
 private:
 	constexpr static size_t m_DataSize{ 3 };
 	std::array<value_type, m_DataSize> m_Data{ 
@@ -45,6 +47,11 @@ private:
 	};
 	
 };
+
+template <std::floating_point Tp>
+inline std::ostream& operator<<(std::ostream& out, const VecBase3<Tp>& Vec) {
+	return out << Vec.x() << ' ' << Vec.y() << ' ' << Vec.z();
+}
 
 template<std::floating_point Tp>
 struct std::formatter<VecBase3<Tp>> {
