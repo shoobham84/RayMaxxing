@@ -17,6 +17,32 @@ public:
 	[[nodiscard]] constexpr value_type length() const {
 		return std::sqrt(length_squared());
 	}
+
+	constexpr Vec3& operator+=(const Vec3& v) noexcept {
+		(*this)[0] += v[0];
+		(*this)[1] += v[1];
+		(*this)[2] += v[2];
+		return *this;
+	}
+
+	constexpr Vec3& operator-=(const Vec3& v) noexcept {
+		(*this)[0] -= v[0];
+		(*this)[1] -= v[1];
+		(*this)[2] -= v[2];
+		return *this;
+	}
+
+	constexpr Vec3& operator*=(const value_type scalar) noexcept {
+		(*this)[0] *= scalar;
+		(*this)[1] *= scalar;
+		(*this)[2] *= scalar;
+		return *this;
+	}
+
+	constexpr Vec3& operator/=(const value_type scalar) {
+		return *this *= static_cast<value_type>(1) / scalar;
+	}
+
 };
 
 template <std::floating_point Tp>
@@ -35,17 +61,17 @@ template <std::floating_point Tp>
 }
 
 template <std::floating_point Tp>
-[[nodiscard]] constexpr Vec3<Tp> operator/(const Vec3<Tp> vec3, Tp val) {
+[[nodiscard]] constexpr Vec3<Tp> operator/(const Vec3<Tp>& vec3, Tp val) {
 	return (static_cast<Tp>(1)/val) * vec3;
 }
 
 template<std::floating_point Tp>
-[[nodiscard]] constexpr Vec3<Tp> operator*(Tp scalar, const Vec3<Tp> vec3) noexcept {
+[[nodiscard]] constexpr Vec3<Tp> operator*(Tp scalar, const Vec3<Tp>& vec3) noexcept {
 	return Vec3<Tp>(scalar * vec3.x(), scalar * vec3.y(), scalar*vec3.z());
 }
 
 template <std::floating_point Tp>
-[[nodiscard]] constexpr Vec3<Tp> operator*(const Vec3<Tp> vec3, Tp val) noexcept {
+[[nodiscard]] constexpr Vec3<Tp> operator*(const Vec3<Tp>& vec3, Tp val) noexcept {
 	return val * vec3;
 }
 
@@ -58,10 +84,10 @@ template<std::floating_point Tp>
 
 template<std::floating_point Tp>
 [[nodiscard]] constexpr Vec3<Tp> cross(const Vec3<Tp>& u, const Vec3<Tp>& v) noexcept{
-	return Vec3(u.y() * v.z() - u.z() * v.y(),
+	return Vec3<Tp>(u.y() * v.z() - u.z() * v.y(),
 			 	u.z() * v.x() - u.x() * v.z(),
 			 	u.x() * v.y() - u.y() * v.x()
-			 );
+	);
 }
 
 template<std::floating_point Tp>
