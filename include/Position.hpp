@@ -1,7 +1,6 @@
 #pragma once
 
 #include "VecBase3.hpp"
-#include <cmath>
 #include "Vec3.hpp"
 
 template<std::floating_point Tp>
@@ -13,14 +12,6 @@ public:
 
 	[[nodiscard]] constexpr Point operator-() const {
 		return Point(-this->x(), -this->y(), -this->z());
-	}
-
-	[[nodiscard]] constexpr value_type length_squared() const {
-		return this->x() * this->x() + this->y() * this->y() + this->z() * this->z();
-	}
-
-	[[nodiscard]] constexpr value_type length() const {
-		return std::sqrt(length_squared());
 	}
 
 	constexpr Point& operator*=(value_type scalar) {
