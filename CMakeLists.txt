@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.23...4.0.0)
 
 project(RayTracer LANGUAGES CXX)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 add_executable(RayTracer 
 src/raytrace.cpp)
 
@@ -12,7 +14,7 @@ set_target_properties(RayTracer PROPERTIES
 )
 
 target_include_directories(RayTracer PRIVATE
-	include
+	${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
 if (MSVC)
