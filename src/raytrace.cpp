@@ -2,22 +2,49 @@
 #include <print>
 #include "Color.hpp"
 #include "Ray.hpp"
+#include "Position.hpp"
+#include <algorithm>
+
+rtrc::color rayColor(const rtrc::ray& ray) {
+	return rtrc::color(); // black
+}
 
 int main() {
-	constexpr int image_width { 256 };
-	constexpr int image_height { 256 };
+	constexpr auto aspectRatio { 16.0 / 9.0 };
+	constexpr int image_width { 400 };
+
+	constexpr int image_height { std::max( 1, static_cast<int>( image_width / aspectRatio ))};
+
+	// camera
+	auto focalLength { 1.0 };
+	auto viewportHeight { 2.0 };
+	auto viewportWidth { viewportHeight * static_cast<double>( image_width) / image_height };
+
+	auto cameraCenter { rtrc::point3() };
+
+	// horz and vertical vectors
+	auto viewportU { rtrc::vec3(viewportWidth, 0.0, 0.0 )};
+	auto viewportV { rtrc::vec3(0.0, -viewportHeight, 0.0 )};
+
+	// pixel delta vectors, interpixel distance
+	auto pixelDeltaU { viewportU / static_cast<double>(image_width ) };
+	auto pixelDeltaV { viewportV / static_cast<double>( image_height ) };
+
+	// location of upper left pixel, pixel grind inset by half interpixel distance to the viewport
+	auto viewportUpperLeft { cameraCenter - rtrc::vec3(0, 0, focalLength) - viewportU / 2.0 - viewportV / 2.0};
+	auto pixelUL_00_Location { viewportUpperLeft + 0.5 * (pixelDeltaU + pixelDeltaV)};
 
 	std::println("P3\n{} {} \n255\n", image_width, image_height);
 
 	for (int j{0}; j < image_height; ++j) {
 		std::println(std::cerr, "\rScanlines remaining: {} ", (image_height - j));
 		for (int i{0}; i < image_width; ++i) {
-			auto pixel_color = rtrc::Color<double>(
-				static_cast<double>(i)/(image_width-1), 
-				static_cast<double>(j)/(image_height-1),
-				0.0);
+			auto pixelCenter = pixelUL_00_Location + (static_cast<double>(i) * pixelDeltaU) + (static_cast<double>(j) * pixelDeltaV);
+			auto rayDirection = pixelCenter - cameraCenter;
+			rtrc::ray r(cameraCenter, rayDirection);
 
-			writeColor(std::cout, pixel_color);
+			rtrc::color pixel_color{ rayColor(r)};
+			rtrc::writeColor(std::cout, pixel_color);
 		}
 	}
 	std::println(std::cerr, "\rDone.              ");
