@@ -3,6 +3,8 @@
 #include "VecBase3.hpp"
 #include "Vec3.hpp"
 
+namespace rtrc {
+
 template<std::floating_point Tp>
 class Point : public VecBase3<Tp>
 {
@@ -32,3 +34,5 @@ public:
 		return *this;
 	}
 };
+
+}

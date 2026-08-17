@@ -3,6 +3,8 @@
 #include "VecBase3.hpp"
 #include <ostream>
 
+namespace rtrc {
+
 template<std::floating_point Tp>
 class Color : public VecBase3<Tp>
 {
@@ -23,4 +25,6 @@ void writeColor(std::ostream& out, const Color<Tp>& PixelColor) {
 	int bbyte = static_cast<int>(255.999 * b);
 
 	out << rbyte << ' ' << gbyte << ' ' << bbyte << '\n';
+}
+
 }

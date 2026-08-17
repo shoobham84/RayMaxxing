@@ -3,6 +3,8 @@
 #include "Vec3.hpp"
 #include "Position.hpp"
 
+namespace rtrc {
+
 template <std::floating_point Tp>
 class Ray {
 public:
@@ -21,3 +23,5 @@ private:
 	Point<value_type> m_Origin;
 	Vec3<value_type> m_Dir;
 };
+
+}

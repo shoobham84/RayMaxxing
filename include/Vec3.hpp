@@ -3,6 +3,8 @@
 #include "VecBase3.hpp"
 #include <cmath>
 
+namespace rtrc {
+
 template<std::floating_point Tp>
 class Vec3 : public VecBase3<Tp>
 {
@@ -93,4 +95,6 @@ template<std::floating_point Tp>
 template<std::floating_point Tp>
 [[nodiscard]] constexpr Vec3<Tp> unit_vector(const Vec3<Tp>& v) {
 	return v / v.length();
+}
+
 }

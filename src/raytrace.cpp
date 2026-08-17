@@ -1,6 +1,7 @@
 #include <iostream>
 #include <print>
 #include "Color.hpp"
+#include "Ray.hpp"
 
 int main() {
 	constexpr int image_width { 256 };
@@ -11,7 +12,7 @@ int main() {
 	for (int j{0}; j < image_height; ++j) {
 		std::println(std::cerr, "\rScanlines remaining: {} ", (image_height - j));
 		for (int i{0}; i < image_width; ++i) {
-			auto pixel_color = Color<double>(
+			auto pixel_color = rtrc::Color<double>(
 				static_cast<double>(i)/(image_width-1), 
 				static_cast<double>(j)/(image_height-1),
 				0.0);

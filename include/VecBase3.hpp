@@ -5,6 +5,8 @@
 #include <format>
 #include <cassert>
 
+namespace rtrc {
+
 template<std::floating_point Tp>
 class VecBase3
 {
@@ -54,13 +56,18 @@ inline std::ostream& operator<<(std::ostream& out, const VecBase3<Tp>& Vec) {
 	return out << Vec.x() << ' ' << Vec.y() << ' ' << Vec.z();
 }
 
+}
+
+
 template<std::floating_point Tp>
-struct std::formatter<VecBase3<Tp>> {
+struct std::formatter<rtrc::VecBase3<Tp>> {
 	constexpr auto parse(std::format_parse_context& ctx) {
 		return ctx.begin();
 	}
 
-	auto format(const VecBase3<Tp>& Vec, std::format_context& ctx) const {
+	auto format(const rtrc::VecBase3<Tp>& Vec, std::format_context& ctx) const {
 		return std::format_to(ctx.out(), "{} {} {}", Vec.x(), Vec.y(), Vec.z());
 	}
 };
+
+
