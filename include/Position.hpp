@@ -16,25 +16,28 @@ public:
 		return Point(-this->x(), -this->y(), -this->z());
 	}
 
-	constexpr Point& operator*=(value_type scalar) {
-		(*this)[0] *= scalar;
-		(*this)[1] *= scalar;
-		(*this)[2] *= scalar;
+	template <std::convertible_to<value_type> Sclr>
+	constexpr Point& operator*=(Sclr scalar) noexcept {
+		const auto s = static_cast<value_type>(scalar);
+		(*this)[0] *= s;
+		(*this)[1] *= s;
+		(*this)[2] *= s;
 		return *this;
 	}
 
-	constexpr Point& operator/=(value_type scalar) {
-		return *this *= static_cast<value_type>(1)/scalar;
+	template <std::convertible_to<value_type> Sclr>
+	constexpr Point& operator/=(Sclr scalar) {
+		return *this *= static_cast<value_type>(1) / static_cast<value_type>(scalar);
 	}
 
-	constexpr Point& operator+=(const Vec3<value_type>& vec3) {
+	constexpr Point& operator+=(const Vec3<value_type>& vec3) noexcept {
 		(*this)[0] += vec3[0];
 		(*this)[1] += vec3[1];
 		(*this)[2] += vec3[2];
 		return *this;
 	}
 
-	constexpr Point& operator-=(const Vec3<value_type>& vec3) {
+	constexpr Point& operator-=(const Vec3<value_type>& vec3) noexcept {
 		(*this)[0] -= vec3[0];
 		(*this)[1] -= vec3[1];
 		(*this)[2] -= vec3[2];
@@ -50,7 +53,7 @@ public:
 	}
 
 	[[nodiscard]] friend constexpr Vec3<value_type> operator-(const Point& p1, const Point& p2) noexcept {
-		return Vec3<value_type>(p1.x() - p2.x(), p1.y() - p2.y(), p2.z() - p2.z());
+		return Vec3<value_type>(p1.x() - p2.x(), p1.y() - p2.y(), p1.z() - p2.z());
 	}
 };
 

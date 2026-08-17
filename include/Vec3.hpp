@@ -34,15 +34,18 @@ public:
 		return *this;
 	}
 
-	constexpr Vec3& operator*=(const value_type scalar) noexcept {
-		(*this)[0] *= scalar;
-		(*this)[1] *= scalar;
-		(*this)[2] *= scalar;
+	template <std::convertible_to<value_type> Sclr>
+	constexpr Vec3& operator*=(Sclr scalar) noexcept {
+		const auto s = static_cast<value_type>(scalar);
+		(*this)[0] *= s;
+		(*this)[1] *= s;
+		(*this)[2] *= s;
 		return *this;
 	}
 
-	constexpr Vec3& operator/=(const value_type scalar) {
-		return *this *= static_cast<value_type>(1) / scalar;
+	template <std::convertible_to<value_type> Sclr>
+	constexpr Vec3& operator/=(Sclr scalar) {
+		return *this *= static_cast<value_type>(1) / static_cast<value_type>(scalar);
 	}
 
 };
@@ -62,18 +65,18 @@ template <std::floating_point Tp>
 	return Vec3<Tp>(u.x() * v.x(), u.y() * v.y(), u.z() * v.z());
 }
 
-template <std::floating_point Tp>
-[[nodiscard]] constexpr Vec3<Tp> operator/(const Vec3<Tp>& vec3, Tp val) {
+template <std::floating_point Tp, std::convertible_to<Tp> Sclr>
+[[nodiscard]] constexpr Vec3<Tp> operator/(const Vec3<Tp>& vec3, Sclr val) {
 	return (static_cast<Tp>(1)/val) * vec3;
 }
 
-template<std::floating_point Tp>
-[[nodiscard]] constexpr Vec3<Tp> operator*(Tp scalar, const Vec3<Tp>& vec3) noexcept {
+template <std::floating_point Tp, std::convertible_to<Tp> Sclr>
+[[nodiscard]] constexpr Vec3<Tp> operator*(Sclr scalar, const Vec3<Tp>& vec3) noexcept {
 	return Vec3<Tp>(scalar * vec3.x(), scalar * vec3.y(), scalar*vec3.z());
 }
 
-template <std::floating_point Tp>
-[[nodiscard]] constexpr Vec3<Tp> operator*(const Vec3<Tp>& vec3, Tp val) noexcept {
+template <std::floating_point Tp, std::convertible_to<Tp> Sclr>
+[[nodiscard]] constexpr Vec3<Tp> operator*(const Vec3<Tp>& vec3, Sclr val) noexcept {
 	return val * vec3;
 }
 

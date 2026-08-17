@@ -27,23 +27,24 @@ int main() {
 	auto viewportV { rtrc::vec3(0.0, -viewportHeight, 0.0 )};
 
 	// pixel delta vectors, interpixel distance
-	auto pixelDeltaU { viewportU / static_cast<double>(image_width ) };
-	auto pixelDeltaV { viewportV / static_cast<double>( image_height ) };
+	auto pixelDeltaU { viewportU / image_width };
+	auto pixelDeltaV { viewportV / image_height };
 
 	// location of upper left pixel, pixel grind inset by half interpixel distance to the viewport
-	auto viewportUpperLeft { cameraCenter - rtrc::vec3(0, 0, focalLength) - viewportU / 2.0 - viewportV / 2.0};
-	auto pixelUL_00_Location { viewportUpperLeft + 0.5 * (pixelDeltaU + pixelDeltaV)};
+	auto viewportUpperLeft { cameraCenter - rtrc::vec3(0, 0, focalLength) - viewportU / 2 - viewportV / 2 };
+	auto pixelUL_00_Location { viewportUpperLeft + 0.5 * (pixelDeltaU + pixelDeltaV) };
 
 	std::println("P3\n{} {} \n255\n", image_width, image_height);
 
 	for (int j{0}; j < image_height; ++j) {
 		std::println(std::cerr, "\rScanlines remaining: {} ", (image_height - j));
 		for (int i{0}; i < image_width; ++i) {
-			auto pixelCenter = pixelUL_00_Location + (static_cast<double>(i) * pixelDeltaU) + (static_cast<double>(j) * pixelDeltaV);
-			auto rayDirection = pixelCenter - cameraCenter;
-			rtrc::ray r(cameraCenter, rayDirection);
+			auto pixelCenter = pixelUL_00_Location + (i * pixelDeltaU) + (j * pixelDeltaV);
 
-			rtrc::color pixel_color{ rayColor(r)};
+			auto rayDirection = pixelCenter - cameraCenter;
+			rtrc::ray testRay(cameraCenter, rayDirection);
+
+			rtrc::color pixel_color{ rayColor(testRay) };
 			rtrc::writeColor(std::cout, pixel_color);
 		}
 	}
