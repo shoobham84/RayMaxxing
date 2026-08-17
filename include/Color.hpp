@@ -27,6 +27,26 @@ void writeColor(std::ostream& out, const Color<Tp>& PixelColor) {
 	out << rbyte << ' ' << gbyte << ' ' << bbyte << '\n';
 }
 
+template<std::floating_point Tp, std::convertible_to<Tp> Sclr>
+[[nodiscard]] constexpr Color<Tp> operator*(Sclr scalar, const Color<Tp>& clr) noexcept {
+	return Color<Tp>(clr.x() * scalar, clr.y() * scalar, clr.z() * scalar);
+}
+
+template <std::floating_point Tp>
+[[nodiscard]] constexpr Color<Tp> operator*(const Color<Tp>&& c1, const Color<Tp>&& c2) noexcept {
+	return Color<Tp>(c1.x() * c2.x(), c1.y() * c2.y(), c1.z() * c2.z());
+}
+
+template <std::floating_point Tp>
+[[nodiscard]] constexpr Color<Tp> operator+(const Color<Tp>&& c1, const Color<Tp>&& c2) noexcept {
+	return Color<Tp>(c1.x() + c2.x(), c1.y() + c2.y(), c1.z() + c2.z());
+}
+
+template <std::floating_point Tp>
+[[nodiscard]] constexpr Color<Tp> operator-(const Color<Tp>&& c1, const Color<Tp>&& c2) noexcept {
+	return Color<Tp>(c1.x() - c2.x(), c1.y() - c2.y(), c1.z() - c2.z());
+}
+
 using Color3d = Color<double>;
 using Color3f = Color<float>;
 using color   = Color3d;

@@ -19,6 +19,9 @@ public:
 		return m_Origin + lambda * m_Dir;
 	}
 
+	[[nodiscard]] constexpr const Vec3<value_type>& direction() const noexcept { return m_Dir; }
+	[[nodiscard]] constexpr const Point<value_type>& origin() const noexcept { return m_Origin; }
+
 private:
 	Point<value_type> m_Origin;
 	Vec3<value_type> m_Dir;

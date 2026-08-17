@@ -5,8 +5,11 @@
 #include "Position.hpp"
 #include <algorithm>
 
+// blendedval = (1-a) * startVal + a * endval
 rtrc::color rayColor(const rtrc::ray& ray) {
-	return rtrc::color(); // black
+	rtrc::vec3 unitDir = rtrc::unit_vector(ray.direction());
+	auto a { 0.5 * (unitDir.y() + 1.0) };
+	return (1.0 - a) * rtrc::color(1.0, 1.0, 1.0) + a * rtrc::color(0.0, 0.0, 0.0);
 }
 
 int main() {
