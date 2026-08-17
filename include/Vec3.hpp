@@ -97,4 +97,8 @@ template<std::floating_point Tp>
 	return v / v.length();
 }
 
+using Vec3d = Vec3<double>;
+using Vec3f = Vec3<float>;
+using vec3  = Vec3d;
+
 }

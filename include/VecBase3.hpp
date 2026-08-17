@@ -56,6 +56,10 @@ inline std::ostream& operator<<(std::ostream& out, const VecBase3<Tp>& Vec) {
 	return out << Vec.x() << ' ' << Vec.y() << ' ' << Vec.z();
 }
 
+using VecBase3d = VecBase3<double>;
+using VecBase3f = VecBase3<float>;
+using vecbase3  = VecBase3d;
+
 }
 
 

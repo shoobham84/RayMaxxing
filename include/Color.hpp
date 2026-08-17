@@ -27,4 +27,8 @@ void writeColor(std::ostream& out, const Color<Tp>& PixelColor) {
 	out << rbyte << ' ' << gbyte << ' ' << bbyte << '\n';
 }
 
+using Color3d = Color<double>;
+using Color3f = Color<float>;
+using color   = Color3d;
+
 }

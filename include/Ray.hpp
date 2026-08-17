@@ -24,4 +24,8 @@ private:
 	Vec3<value_type> m_Dir;
 };
 
+using Ray3d = Ray<double>;
+using Ray3f = Ray<float>;
+using ray   = Ray3d;
+
 }

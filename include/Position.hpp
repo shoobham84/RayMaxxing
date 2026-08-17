@@ -35,4 +35,8 @@ public:
 	}
 };
 
+using Point3d = Point<double>;
+using Point3f = Point<float>;
+using point3  = Point3d;
+
 }
