@@ -33,10 +33,30 @@ public:
 		(*this)[2] += vec3[2];
 		return *this;
 	}
+
+	constexpr Point& operator-=(const Vec3<value_type>& vec3) {
+		(*this)[0] -= vec3[0];
+		(*this)[1] -= vec3[1];
+		(*this)[2] -= vec3[2];
+		return *this;
+	}
+
+	[[nodiscard]] friend constexpr Point<value_type> operator+(const Point& p, const Vec3<value_type>& v) noexcept {
+		return Point(p.x() + v.x(), p.y() + v.y(), p.z() + v.z());
+	}
+
+	[[nodiscard]] friend constexpr Point<value_type> operator-(const Point& p, const Vec3<value_type>& v) noexcept {
+		return Point(p.x() - v.x(), p.y() - v.y(), p.z() - v.z());
+	}
+
+	[[nodiscard]] friend constexpr Vec3<value_type> operator-(const Point& p1, const Point& p2) noexcept {
+		return Vec3<value_type>(p1.x() - p2.x(), p1.y() - p2.y(), p2.z() - p2.z());
+	}
 };
 
 using Point3d = Point<double>;
 using Point3f = Point<float>;
 using point3  = Point3d;
+
 
 }
