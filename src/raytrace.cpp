@@ -5,8 +5,25 @@
 #include "Position.hpp"
 #include <algorithm>
 
+// assuming a sphere C with center C = (Cx, Cy, Cz). a ray emanating from a point3 (x, y, z)
+// (Cx - x)^2 + (Cy - y)^2 + (Cz - z)^2 = r^2  standard form of a sphere
+// below func used to find if point satisfies the sphere's equation, vector form: |P - C| = r;  (P - C) dot (P - C) = r^2 
+bool sphereHit(const rtrc::point3& center, double radius, const rtrc::ray& ray) {
+	rtrc::vec3 OC { center - ray.origin()};
+	auto a { rtrc::dot(ray.direction(), ray.direction()) };
+	auto b { (-2.0) * rtrc::dot(ray.direction(), OC) };
+	auto c { rtrc::dot(OC, OC) - (radius * radius) };
+
+	return ((b*b - 4*a*c) >= 0);
+}
+
+
 // blendedval = (1-a) * startVal + a * endval
+// hardcoding a maroon sphere in the image at posn(0,0,-1) of radius 0.5 
 rtrc::color rayColor(const rtrc::ray& ray) {
+	if (sphereHit(rtrc::point3(0, 0, -1), 0.5, ray))
+		return rtrc::color(0.2588, 0.0275, 0.1137);
+
 	rtrc::vec3 unitDir = rtrc::unit_vector(ray.direction());
 	auto a { 0.5 * (unitDir.y() + 1.0) };
 	return (1.0 - a) * rtrc::color(1.0, 1.0, 1.0) + a * rtrc::color(0.0, 0.0, 0.0);
@@ -33,7 +50,7 @@ int main() {
 	auto pixelDeltaU { viewportU / image_width };
 	auto pixelDeltaV { viewportV / image_height };
 
-	// location of upper left pixel, pixel grind inset by half interpixel distance to the viewport
+	// location of upper left pixel, pixel grid inset by half interpixel distance to the viewport
 	auto viewportUpperLeft { cameraCenter - rtrc::vec3(0, 0, focalLength) - viewportU / 2 - viewportV / 2 };
 	auto pixelUL_00_Location { viewportUpperLeft + 0.5 * (pixelDeltaU + pixelDeltaV) };
 
