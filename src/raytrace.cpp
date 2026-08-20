@@ -8,21 +8,25 @@
 // assuming a sphere C with center C = (Cx, Cy, Cz). a ray emanating from a point3 (x, y, z)
 // (Cx - x)^2 + (Cy - y)^2 + (Cz - z)^2 = r^2  standard form of a sphere
 // below func used to find if point satisfies the sphere's equation, vector form: |P - C| = r;  (P - C) dot (P - C) = r^2 
-bool sphereHit(const rtrc::point3& center, double radius, const rtrc::ray& ray) {
+double sphereHit(const rtrc::point3& center, double radius, const rtrc::ray& ray) {
 	rtrc::vec3 OC { center - ray.origin()};
 	auto a { rtrc::dot(ray.direction(), ray.direction()) };
 	auto b { (-2.0) * rtrc::dot(ray.direction(), OC) };
 	auto c { rtrc::dot(OC, OC) - (radius * radius) };
 
-	return ((b*b - 4*a*c) >= 0);
+	auto discriminant{ b*b - 4*a*c };
+	if (discriminant < 0) return -1;
+	return (-b - std::sqrt(discriminant)) / (2.0 * a);
 }
 
 
 // blendedval = (1-a) * startVal + a * endval
-// hardcoding a maroon sphere in the image at posn(0,0,-1) of radius 0.5 
 rtrc::color rayColor(const rtrc::ray& ray) {
-	if (sphereHit(rtrc::point3(0, 0, -1), 0.5, ray))
-		return rtrc::color(0.2588, 0.0275, 0.1137);
+	auto lambda { sphereHit(rtrc::point3(0, 0, -1), 0.5, ray) };     // here lambda is: a + lambda*b in eqn of 3d ray
+	if (lambda > 0.0) {
+		rtrc::vec3 NormalVec = rtrc::unit_vector(ray.at(lambda) - rtrc::point3(0, 0, -1));
+		return 0.5 * rtrc::color(NormalVec.x()+1, NormalVec.y()+1, NormalVec.z()+1);
+	} 
 
 	rtrc::vec3 unitDir = rtrc::unit_vector(ray.direction());
 	auto a { 0.5 * (unitDir.y() + 1.0) };
