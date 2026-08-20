@@ -32,18 +32,23 @@ template<std::floating_point Tp, std::convertible_to<Tp> Sclr>
 	return Color<Tp>(clr.x() * scalar, clr.y() * scalar, clr.z() * scalar);
 }
 
+template<std::floating_point Tp, std::convertible_to<Tp> Sclr>
+[[nodiscard]] constexpr Color<Tp> operator*(const Color<Tp>& clr, Sclr scalar) noexcept {
+	return Color<Tp>(clr.x() * scalar, clr.y() * scalar, clr.z() * scalar);
+}
+
 template <std::floating_point Tp>
-[[nodiscard]] constexpr Color<Tp> operator*(const Color<Tp>&& c1, const Color<Tp>&& c2) noexcept {
+[[nodiscard]] constexpr Color<Tp> operator*(const Color<Tp>& c1, const Color<Tp>& c2) noexcept {
 	return Color<Tp>(c1.x() * c2.x(), c1.y() * c2.y(), c1.z() * c2.z());
 }
 
 template <std::floating_point Tp>
-[[nodiscard]] constexpr Color<Tp> operator+(const Color<Tp>&& c1, const Color<Tp>&& c2) noexcept {
+[[nodiscard]] constexpr Color<Tp> operator+(const Color<Tp>& c1, const Color<Tp>& c2) noexcept {
 	return Color<Tp>(c1.x() + c2.x(), c1.y() + c2.y(), c1.z() + c2.z());
 }
 
 template <std::floating_point Tp>
-[[nodiscard]] constexpr Color<Tp> operator-(const Color<Tp>&& c1, const Color<Tp>&& c2) noexcept {
+[[nodiscard]] constexpr Color<Tp> operator-(const Color<Tp>& c1, const Color<Tp>& c2) noexcept {
 	return Color<Tp>(c1.x() - c2.x(), c1.y() - c2.y(), c1.z() - c2.z());
 }
 

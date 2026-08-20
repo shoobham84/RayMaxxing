@@ -15,7 +15,7 @@ public:
 	Ray(const Point<value_type>& origin, const Vec3<value_type>& direction) 
 	: m_Origin(origin), m_Dir(direction) {}
 
-	constexpr Point<value_type> at(value_type lambda) {
+	constexpr Point<value_type> at(value_type lambda) const noexcept {
 		return m_Origin + lambda * m_Dir;
 	}
 

@@ -44,11 +44,15 @@ public:
 		return *this;
 	}
 
-	[[nodiscard]] friend constexpr Point<value_type> operator+(const Point& p, const Vec3<value_type>& v) noexcept {
+	[[nodiscard]] friend constexpr Point operator+(const Point& p, const Vec3<value_type>& v) noexcept {
 		return Point(p.x() + v.x(), p.y() + v.y(), p.z() + v.z());
 	}
 
-	[[nodiscard]] friend constexpr Point<value_type> operator-(const Point& p, const Vec3<value_type>& v) noexcept {
+	[[nodiscard]] friend constexpr Point operator+(const Vec3<value_type>& v, const Point& p) noexcept {
+		return Point(p.x() + v.x(), p.y() + v.y(), p.z() + v.z());
+	}
+
+	[[nodiscard]] friend constexpr Point operator-(const Point& p, const Vec3<value_type>& v) noexcept {
 		return Point(p.x() - v.x(), p.y() - v.y(), p.z() - v.z());
 	}
 
