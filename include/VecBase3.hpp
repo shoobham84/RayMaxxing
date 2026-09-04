@@ -28,14 +28,14 @@ public:
 		return m_Data[2];
 	}
 
-	[[nodiscard]] constexpr const value_type& operator[](size_t _index) const {
-		assert(_index < m_DataSize && "Index out of bounds");
-		return m_Data[_index];
+	[[nodiscard]] constexpr const value_type& operator[](size_t index) const {
+		assert(index < m_DataSize && "Index out of bounds");
+		return m_Data[index];
 	}
 
-	[[nodiscard]] value_type& operator[](size_t _index) {
-		assert(_index < m_DataSize && "Index out of bounds");
-		return m_Data[_index];
+	[[nodiscard]] value_type& operator[](size_t index) {
+		assert(index < m_DataSize && "Index out of bounds");
+		return m_Data[index];
 	}
 
 	[[nodiscard]] bool operator==(const VecBase3<value_type>& other) const noexcept = default;

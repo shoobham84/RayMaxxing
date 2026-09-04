@@ -10,28 +10,33 @@
 // below func used to find if point satisfies the sphere's equation, vector form: |P - C| = r;  (P - C) dot (P - C) = r^2 
 double sphereHit(const rtrc::point3& center, double radius, const rtrc::ray& ray) {
 	rtrc::vec3 OC { center - ray.origin()};
+
+	// ax^2 + bx + c
 	auto a { rtrc::dot(ray.direction(), ray.direction()) };
-	auto b { (-2.0) * rtrc::dot(ray.direction(), OC) };
+	auto h { rtrc::dot(ray.direction(), OC)};                  // put b = -2h, D = h^2 - ac
 	auto c { rtrc::dot(OC, OC) - (radius * radius) };
 
-	auto discriminant{ b*b - 4*a*c };
+	auto discriminant{ h*h - a*c };
 	if (discriminant < 0) return -1;
-	return (-b - std::sqrt(discriminant)) / (2.0 * a);
+	return (h - std::sqrt(discriminant) ) / (2.0 * a);
 }
 
 
 // blendedval = (1-a) * startVal + a * endval
 rtrc::color rayColor(const rtrc::ray& ray) {
-	auto lambda { sphereHit(rtrc::point3(0, 0, -1), 0.5, ray) };     // here lambda is: a + lambda*b in eqn of 3d ray
+	auto sphereCenter{ rtrc::point3(0, 0, -1) };  // sphere at 0, 0, -1
+	auto lambda { sphereHit(sphereCenter, 0.5, ray) };     // here lambda is: a + lambda*b in eqn of 3d ray
+
 	if (lambda > 0.0) {
-		rtrc::vec3 NormalVec = rtrc::unit_vector(ray.at(lambda) - rtrc::point3(0, 0, -1));
+		rtrc::vec3 NormalVec{ rtrc::unit_vector(ray.at(lambda) - sphereCenter) };
 		return 0.5 * rtrc::color(NormalVec.x()+1, NormalVec.y()+1, NormalVec.z()+1);
 	} 
 
 	rtrc::vec3 unitDir = rtrc::unit_vector(ray.direction());
 	auto a { 0.5 * (unitDir.y() + 1.0) };
-	return (1.0 - a) * rtrc::color(1.0, 1.0, 1.0) + a * rtrc::color(0.0, 0.0, 0.0);
+	return (1.0 - a) * rtrc::color(1.0, 1.0, 1.0) + a * rtrc::color(0.0, 0.3, 0.7);
 }
+
 
 int main() {
 	constexpr auto aspectRatio { 16.0 / 9.0 };

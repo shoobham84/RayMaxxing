@@ -8,6 +8,7 @@ add_executable(RayTracer
 src/raytrace.cpp)
 
 target_compile_features(RayTracer PRIVATE cxx_std_23)
+
 set_target_properties(RayTracer PROPERTIES
 	CXX_STANDARD_REQUIRED ON
 	CXX_EXTENSIONS OFF
