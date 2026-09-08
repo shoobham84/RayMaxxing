@@ -1,8 +1,7 @@
 #include <iostream>
 #include <print>
-#include "Color.hpp"
+#include "Vec3.hpp"
 #include "Ray.hpp"
-#include "Position.hpp"
 #include <algorithm>
 
 // assuming a sphere C with center C = (Cx, Cy, Cz). a ray emanating from a point3 (x, y, z)

@@ -1,16 +1,50 @@
 #pragma once
 
-#include "VecBase3.hpp"
+#include <concepts>
+#include <array>
+#include <format>
+#include <cassert>
 #include <cmath>
+#include <ostream>
 
 namespace rtrc {
 
 template<std::floating_point Tp>
-class Vec3 : public VecBase3<Tp>
+class Vec3
 {
 public:
 	using value_type = Tp;
-	using VecBase3<value_type>::VecBase3;
+
+	constexpr Vec3() noexcept = default;
+
+	constexpr Vec3(value_type x, value_type y, value_type z)
+	: m_Data{ x, y, z } {}
+
+	[[nodiscard]] constexpr value_type x() const noexcept {
+		return m_Data[0]; 
+	}
+	[[nodiscard]] constexpr value_type y() const noexcept {
+		return m_Data[1];
+	}
+	[[nodiscard]] constexpr value_type z() const noexcept { 
+		return m_Data[2];
+	}
+
+	[[nodiscard]] constexpr const value_type& operator[](size_t index) const {
+		assert(index < m_DataSize && "Index out of bounds");
+		return m_Data[index];
+	}
+
+	[[nodiscard]] value_type& operator[](size_t index) {
+		assert(index < m_DataSize && "Index out of bounds");
+		return m_Data[index];
+	}
+
+	[[nodiscard]] constexpr Vec3 operator-() const {
+		return Vec3(-(this->x()), -(this->y()), -(this->z()));
+	}
+
+	[[nodiscard]] bool operator==(const Vec3<value_type>& other) const noexcept = default;
 
 	[[nodiscard]] constexpr value_type length_squared() const {
 		return this->x() * this->x() + this->y() * this->y() + this->z() * this->z();
@@ -48,7 +82,23 @@ public:
 		return *this *= static_cast<value_type>(1) / static_cast<value_type>(scalar);
 	}
 
+private:
+	constexpr static size_t m_DataSize{ 3 };
+
+	std::array<value_type, m_DataSize> m_Data{ 
+		static_cast<value_type>(0),
+		static_cast<value_type>(0),
+		static_cast<value_type>(0)
+	};
+	
 };
+
+// ── free operators ───────────────────────────────────────────────────
+
+template <std::floating_point Tp>
+inline std::ostream& operator<<(std::ostream& out, const Vec3<Tp>& Vec) {
+	return out << Vec.x() << ' ' << Vec.y() << ' ' << Vec.z();
+}
 
 template <std::floating_point Tp>
 [[nodiscard]] constexpr Vec3<Tp> operator+(const Vec3<Tp>& u, const Vec3<Tp>& v) noexcept {
@@ -80,6 +130,8 @@ template <std::floating_point Tp, std::convertible_to<Tp> Sclr>
 	return val * vec3;
 }
 
+// ── geometric helpers ────────────────────────────────────────────────
+
 template<std::floating_point Tp>
 [[nodiscard]] constexpr Tp dot(const Vec3<Tp>& u, const Vec3<Tp>& v) {
 	return u.x() * v.x() +
@@ -100,8 +152,52 @@ template<std::floating_point Tp>
 	return v / v.length();
 }
 
+// ── color helper ─────────────────────────────────────────────────────
+
+template<std::floating_point Tp>
+void writeColor(std::ostream& out, const Vec3<Tp>& PixelColor) {
+	auto r{ PixelColor.x() };
+	auto g{ PixelColor.y() };
+	auto b{ PixelColor.z() };
+
+	// translate [0,1] to range [0, 255]
+	int rbyte = static_cast<int>(255.999 * r);
+	int gbyte = static_cast<int>(255.999 * g);
+	int bbyte = static_cast<int>(255.999 * b);
+
+	out << rbyte << ' ' << gbyte << ' ' << bbyte << '\n';
+}
+
+// ── type aliases ─────────────────────────────────────────────────────
+
 using Vec3d = Vec3<double>;
 using Vec3f = Vec3<float>;
 using vec3  = Vec3d;
 
+template<std::floating_point Tp>
+using Color = Vec3<Tp>;
+
+using Color3d = Color<double>;
+using Color3f = Color<float>;
+using color   = Color3d;
+
+template<std::floating_point Tp>
+using Point = Vec3<Tp>;
+
+using Point3d = Point<double>;
+using Point3f = Point<float>;
+using point3  = Point3d;
+
 }
+
+
+template<std::floating_point Tp>
+struct std::formatter<rtrc::Vec3<Tp>> {
+	constexpr auto parse(std::format_parse_context& ctx) {
+		return ctx.begin();
+	}
+
+	auto format(const rtrc::Vec3<Tp>& Vec, std::format_context& ctx) const {
+		return std::format_to(ctx.out(), "{} {} {}", Vec.x(), Vec.y(), Vec.z());
+	}
+};

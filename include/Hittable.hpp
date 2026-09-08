@@ -5,9 +5,15 @@
 
 class HitRecord {
 public:
-	rtrc::point3 points;
-	rtrc::vec3 normal;
-	double time;
+	rtrc::point3 Points;
+	rtrc::vec3 Normal;
+	double Time;
+	bool frontFace;
+	
+	void setFaceNormal(const rtrc::ray& r, const rtrc::vec3& outward_normal) {
+		frontFace = rtrc::dot(r.direction(), outward_normal) < 0;
+		Normal = frontFace ? outward_normal : -outward_normal; 
+	}
 };
 
 template<std::floating_point Tp>
