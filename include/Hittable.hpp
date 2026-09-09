@@ -21,5 +21,5 @@ class Hittable {
 public:
 	virtual ~Hittable() = default;
 
-	virtual bool Hit(const rtrc::Ray<Tp>&, double time_min, double time_max, HitRecord& record) const = 0;
+	virtual bool Hit(const rtrc::Ray<Tp>&, Tp time_min, Tp time_max, HitRecord& record) const = 0;
 };

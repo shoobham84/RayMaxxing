@@ -30,9 +30,10 @@ public:
 			if (root <= tmin || root >= tmax) return false;
 		}
 
-		rec.time = root;
-		rec.points = r.at(rec.time);
-		rec.normal = (rec.points - m_Center) / m_Radius;
+		rec.Time = root;
+		rec.Points = r.at(rec.Time);
+		rtrc::vec3 outwardNormal { (rec.Points - m_Center )/ m_Radius};
+		rec.setFaceNormal(r, outwardNormal);
 
 		return true;
 	}
