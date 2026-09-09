@@ -1,35 +1,16 @@
 #include <iostream>
-#include <print>
-#include "Vec3.hpp"
-#include "Ray.hpp"
 #include <algorithm>
-
-// assuming a sphere C with center C = (Cx, Cy, Cz). a ray emanating from a point3 (x, y, z)
-// (Cx - x)^2 + (Cy - y)^2 + (Cz - z)^2 = r^2  standard form of a sphere
-// below func used to find if point satisfies the sphere's equation, vector form: |P - C| = r;  (P - C) dot (P - C) = r^2 
-double sphereHit(const rtrc::point3& center, double radius, const rtrc::ray& ray) {
-	rtrc::vec3 OC { center - ray.origin()};
-
-	// ax^2 + bx + c
-	auto a { rtrc::dot(ray.direction(), ray.direction()) };
-	auto h { rtrc::dot(ray.direction(), OC)};                  // put b = -2h, D = h^2 - ac
-	auto c { rtrc::dot(OC, OC) - (radius * radius) };
-
-	auto discriminant{ h*h - a*c };
-	if (discriminant < 0) return -1;
-	return (h - std::sqrt(discriminant) ) / (2.0 * a);
-}
+#include "RayMaxxing.hpp"
+#include "Hittable.hpp"
+#include "HittableList.hpp"
+#include "Sphere.hpp"
 
 
-// blendedval = (1-a) * startVal + a * endval
-rtrc::color rayColor(const rtrc::ray& ray) {
-	auto sphereCenter{ rtrc::point3(0, 0, -1) };  // sphere at 0, 0, -1
-	auto lambda { sphereHit(sphereCenter, 0.5, ray) };     // here lambda is: a + lambda*b in eqn of 3d ray
-
-	if (lambda > 0.0) {
-		rtrc::vec3 NormalVec{ rtrc::unit_vector(ray.at(lambda) - sphereCenter) };
-		return 0.5 * rtrc::color(NormalVec.x()+1, NormalVec.y()+1, NormalVec.z()+1);
-	} 
+rtrc::color rayColor(const rtrc::ray& ray, const Hittable& world) {
+	HitRecord record;
+	if (world.Hit(ray, 0, Infinity, record)) {
+		return 0.5 * (record.Normal + rtrc::color(1,1,1));
+	}
 
 	rtrc::vec3 unitDir = rtrc::unit_vector(ray.direction());
 	auto a { 0.5 * (unitDir.y() + 1.0) };
@@ -42,6 +23,11 @@ int main() {
 	constexpr int image_width { 400 };
 
 	constexpr int image_height { std::max( 1, static_cast<int>( image_width / aspectRatio ))};
+
+	// world
+	HittableList world;
+	world.add(std::make_shared<Sphere>(rtrc::point3(0, 0, -1), 0.5));
+	world.add(std::make_shared<Sphere>(rtrc::point3(0, -100.5, -1), 100));
 
 	// camera
 	auto focalLength { 1.0 };
@@ -72,7 +58,7 @@ int main() {
 			auto rayDirection = pixelCenter - cameraCenter;
 			rtrc::ray testRay(cameraCenter, rayDirection);
 
-			rtrc::color pixel_color{ rayColor(testRay) };
+			rtrc::color pixel_color{ rayColor(testRay, world) };
 			rtrc::writeColor(std::cout, pixel_color);
 		}
 	}

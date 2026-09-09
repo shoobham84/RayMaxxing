@@ -16,10 +16,11 @@ public:
 	}
 };
 
-template<std::floating_point Tp>
 class Hittable {
 public:
 	virtual ~Hittable() = default;
 
-	virtual bool Hit(const rtrc::Ray<Tp>&, Tp time_min, Tp time_max, HitRecord& record) const = 0;
+	virtual bool Hit(const rtrc::ray& ray, double ray_tmin, double ray_tmax, HitRecord& record) const = 0;
 };
+
+using hittable = Hittable;

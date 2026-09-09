@@ -4,28 +4,31 @@
 #include <vector>
 #include <memory>
 
-template <std::floating_point Tp>
-class HittableList : public Hittable<Tp> {
+class HittableList : public Hittable {
 public:
-	std::vector<std::shared_ptr<Hittable<Tp>>> objects;
+	std::vector<std::shared_ptr<Hittable>> objects;
 	
 	HittableList() = default;
-	HittableList(std::shared_ptr<Hittable<Tp>> object) {
+	HittableList(std::shared_ptr<Hittable> object) {
 		add(object);
 	}
 
-	void add(std::shared_ptr<Hittable<Tp>> obj) {
+	void clear() {
+		objects.clear();
+	}
+
+	void add(std::shared_ptr<Hittable> obj) {
 		objects.emplace_back(obj);
 	}
 
-	bool hit(const rtrc::ray& ray, Tp ray_tmin, Tp ray_tmax, HitRecord& record) const override {
+	bool Hit(const rtrc::ray& ray, double ray_tmin, double ray_tmax, HitRecord& record) const override {
 		HitRecord tempRecord;
 		bool hitAnything{ false };
 
 		auto closestSoFar = ray_tmax;
 
 		for (const auto& obj : objects) {
-			if (obj->hit(ray, ray_tmin, closestSoFar, tempRecord)) {
+			if (obj->Hit(ray, ray_tmin, closestSoFar, tempRecord)) {
 				hitAnything = true;
 				closestSoFar = tempRecord.Time;
 				record = tempRecord;
@@ -35,3 +38,5 @@ public:
 		return hitAnything;
 	}
 };
+
+using hittable_list = HittableList;

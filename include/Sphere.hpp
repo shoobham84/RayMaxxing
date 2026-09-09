@@ -3,15 +3,13 @@
 #include "Hittable.hpp"
 #include "Ray.hpp"
 
-template<std::floating_point Tp>
-class Sphere : public Hittable<Tp>
+class Sphere : public Hittable
 {
 public:
-	using value_type = Tp;
-	Sphere(const rtrc::point3& center, Tp radius) 
-	: m_Center(center), m_Radius(std::fmax(0, radius)) {}
+	Sphere(const rtrc::point3& center, double radius) 
+	: m_Center(center), m_Radius(std::fmax(0.0, radius)) {}
 
-	bool Hit(const rtrc::ray& r, value_type tmin, value_type tmax, HitRecord& rec) const override {
+	bool Hit(const rtrc::ray& r, double tmin, double tmax, HitRecord& rec) const override {
 		rtrc::vec3 OC {m_Center - r.origin()};
 
 		// λ^2 * |d|^2 - λ * 2 * b * OC + |OC|^2 - r ^ 2 = 0
@@ -40,5 +38,7 @@ public:
 
 private:
 	rtrc::point3 m_Center;
-	value_type m_Radius;
+	double m_Radius;
 };
+
+using sphere = Sphere;
