@@ -9,7 +9,7 @@ public:
 	Sphere(const rtrc::point3& center, double radius) 
 	: m_Center(center), m_Radius(std::fmax(0.0, radius)) {}
 
-	bool Hit(const rtrc::ray& r, double tmin, double tmax, HitRecord& rec) const override {
+	bool Hit(const rtrc::ray& r, Interval ray_t, HitRecord& rec) const override {
 		rtrc::vec3 OC {m_Center - r.origin()};
 
 		// λ^2 * |d|^2 - λ * 2 * b * OC + |OC|^2 - r ^ 2 = 0
@@ -23,9 +23,9 @@ public:
 		auto sqrt_discr { std::sqrt(discriminant) };
 
 		auto root { (h - sqrt_discr) / a};
-		if (root <= tmin || root >= tmax) {
+		if (!ray_t.surrounds(root)) {
 			root = (h + sqrt_discr) / a;
-			if (root <= tmin || root >= tmax) return false;
+			if (!ray_t.surrounds(root)) return false;
 		}
 
 		rec.Time = root;

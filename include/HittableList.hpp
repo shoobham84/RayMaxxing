@@ -21,14 +21,14 @@ public:
 		objects.emplace_back(obj);
 	}
 
-	bool Hit(const rtrc::ray& ray, double ray_tmin, double ray_tmax, HitRecord& record) const override {
+	bool Hit(const rtrc::ray& ray, Interval ray_t, HitRecord& record) const override {
 		HitRecord tempRecord;
 		bool hitAnything{ false };
 
-		auto closestSoFar = ray_tmax;
+		auto closestSoFar = ray_t.Max;
 
 		for (const auto& obj : objects) {
-			if (obj->Hit(ray, ray_tmin, closestSoFar, tempRecord)) {
+			if (obj->Hit(ray, Interval(ray_t.Min, closestSoFar), tempRecord)) {
 				hitAnything = true;
 				closestSoFar = tempRecord.Time;
 				record = tempRecord;

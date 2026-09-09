@@ -8,7 +8,7 @@
 
 rtrc::color rayColor(const rtrc::ray& ray, const Hittable& world) {
 	HitRecord record;
-	if (world.Hit(ray, 0, Infinity, record)) {
+	if (world.Hit(ray, Interval(0, Infinity), record)) {
 		return 0.5 * (record.Normal + rtrc::color(1,1,1));
 	}
 
