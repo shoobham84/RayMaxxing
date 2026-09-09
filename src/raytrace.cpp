@@ -28,10 +28,10 @@ int main() {
 	HittableList world;
 	world.add(std::make_shared<Sphere>(rtrc::point3(0, -100.5, -1), 100)); // the ground is a sphere yo
 
-	world.add(std::make_shared<Sphere>(rtrc::point3(0.45, 0.45, -0.45), 1));
-	world.add(std::make_shared<Sphere>(rtrc::point3(0.45, -0.45, -0.45), 1));
-	world.add(std::make_shared<Sphere>(rtrc::point3(-0.45, 0.45, -0.45), 1));
-	world.add(std::make_shared<Sphere>(rtrc::point3(-0.45, -0.45, -0.45), 1));
+	world.add(std::make_shared<Sphere>(rtrc::point3(0.45, 0.45, -0.45), 0.45));
+	world.add(std::make_shared<Sphere>(rtrc::point3(0.45, -0.45, -0.45), 0.45));
+	world.add(std::make_shared<Sphere>(rtrc::point3(-0.45, 0.45, -0.45), 0.45));
+	world.add(std::make_shared<Sphere>(rtrc::point3(-0.45, -0.45, -0.45), 0.45));
 
 
 	// camera
