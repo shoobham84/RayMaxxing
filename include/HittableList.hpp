@@ -39,4 +39,3 @@ public:
 	}
 };
 
-using hittable_list = HittableList;

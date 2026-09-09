@@ -19,15 +19,20 @@ rtrc::color rayColor(const rtrc::ray& ray, const Hittable& world) {
 
 
 int main() {
-	constexpr auto aspectRatio { 16.0 / 9.0 };
-	constexpr int image_width { 400 };
+	constexpr const auto aspectRatio { 16.0 / 9.0 };
+	constexpr const int image_width { 400 };
 
-	constexpr int image_height { std::max( 1, static_cast<int>( image_width / aspectRatio ))};
+	constexpr const int image_height { std::max( 1, static_cast<int>( image_width / aspectRatio ))};
 
 	// world
 	HittableList world;
-	world.add(std::make_shared<Sphere>(rtrc::point3(0, 0, -1), 0.5));
-	world.add(std::make_shared<Sphere>(rtrc::point3(0, -100.5, -1), 100));
+	world.add(std::make_shared<Sphere>(rtrc::point3(0, -100.5, -1), 100)); // the ground is a sphere yo
+
+	world.add(std::make_shared<Sphere>(rtrc::point3(0.45, 0.45, -0.45), 1));
+	world.add(std::make_shared<Sphere>(rtrc::point3(0.45, -0.45, -0.45), 1));
+	world.add(std::make_shared<Sphere>(rtrc::point3(-0.45, 0.45, -0.45), 1));
+	world.add(std::make_shared<Sphere>(rtrc::point3(-0.45, -0.45, -0.45), 1));
+
 
 	// camera
 	auto focalLength { 1.0 };
