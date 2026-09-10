@@ -8,7 +8,7 @@ class Camera {
 public:
 	static constexpr const auto aspectRatio { 16.0 / 9.0 };
 	static constexpr const int image_width { 400 };
-
+	int samples_per_pixel { 10 };
 
 	void Render(const Hittable& world) {
 		Initialize();
@@ -18,13 +18,13 @@ public:
 		for (int j{0}; j < image_height; ++j) {
 			std::println(std::cerr, "\rScanlines remaining: {} ", (image_height - j));
 			for (int i{0}; i < image_width; ++i) {
-				auto pixelCenter = pixelUL_00_Location + (i * pixelDeltaU) + (j * pixelDeltaV);
+				rtrc::color pixelColor(0, 0, 0);
+				for (auto sample{0}; sample < samples_per_pixel; ++sample) {
+					rtrc::ray ray = getRay(i, j);
+					pixelColor += rayColor(ray, world);
+				}
 
-				auto rayDirection = pixelCenter - cameraCenter;
-				rtrc::ray testRay(cameraCenter, rayDirection);
-
-				rtrc::color pixel_color{ rayColor(testRay, world) };
-				rtrc::writeColor(std::cout, pixel_color);
+				rtrc::writeColor(std::cout, pixelSamplesScale * pixelColor);
 			}
 		}
 		std::println(std::cerr, "\rDone.              ");
@@ -32,6 +32,7 @@ public:
 
 private:
 	int image_height;
+	double pixelSamplesScale;
 	rtrc::point3 cameraCenter; 
 	rtrc::point3 pixelUL_00_Location;
 	rtrc::Vec3<double> pixelDeltaU;
@@ -59,6 +60,22 @@ private:
 		auto viewportUpperLeft { cameraCenter - rtrc::vec3(0, 0, focalLength) - viewportU / 2 - viewportV / 2 };
 
 		pixelUL_00_Location = viewportUpperLeft + 0.5 * (pixelDeltaU + pixelDeltaV);
+
+		pixelSamplesScale = 1.0 / samples_per_pixel;
+	}
+
+	rtrc::vec3 sampleSquare() const {
+		return rtrc::vec3(randomDouble() - 0.5, randomDouble() - 0.5, 0);
+	}
+
+	rtrc::ray getRay(int i, int j) const {
+		auto offset { sampleSquare() };
+		auto pixelSample{ pixelUL_00_Location + ((i + offset.x()) * pixelDeltaU) + ((j + offset.y()) * pixelDeltaV) };
+		
+		auto rayOrigin = cameraCenter;
+		auto rayDirection = pixelSample - rayOrigin;
+
+		return rtrc::ray(rayOrigin, rayDirection);
 	}
 
 	rtrc::color rayColor(const rtrc::ray& ray, const Hittable& world) {
