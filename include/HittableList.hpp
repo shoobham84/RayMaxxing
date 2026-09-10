@@ -17,7 +17,7 @@ public:
 		objects.clear();
 	}
 
-	void add(std::shared_ptr<Hittable> obj) {
+	constexpr void add(std::shared_ptr<Hittable> obj) {
 		objects.emplace_back(obj);
 	}
 

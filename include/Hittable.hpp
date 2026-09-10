@@ -11,7 +11,7 @@ public:
 	double Time;
 	bool frontFace;
 	
-	void setFaceNormal(const rtrc::ray& r, const rtrc::vec3& outward_normal) {
+	constexpr void setFaceNormal(const rtrc::ray& r, const rtrc::vec3& outward_normal) {
 		frontFace = rtrc::dot(r.direction(), outward_normal) < 0;
 		Normal = frontFace ? outward_normal : -outward_normal; 
 	}

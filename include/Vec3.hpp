@@ -36,7 +36,7 @@ public:
 		return m_Data[index];
 	}
 
-	[[nodiscard]] value_type& operator[](size_t index) {
+	[[nodiscard]] constexpr value_type& operator[](size_t index) {
 		assert(index < m_DataSize && "Index out of bounds");
 		return m_Data[index];
 	}
@@ -45,7 +45,7 @@ public:
 		return Vec3(-(this->x()), -(this->y()), -(this->z()));
 	}
 
-	[[nodiscard]] bool operator==(const Vec3<value_type>& other) const noexcept = default;
+	[[nodiscard]] constexpr bool operator==(const Vec3<value_type>& other) const noexcept = default;
 
 	[[nodiscard]] constexpr value_type length_squared() const {
 		return this->x() * this->x() + this->y() * this->y() + this->z() * this->z();

@@ -11,7 +11,7 @@ public:
 
 	constexpr Ray() noexcept = default;
 
-	Ray(const Point<value_type>& origin, const Vec3<value_type>& direction) 
+	constexpr Ray(const Point<value_type>& origin, const Vec3<value_type>& direction) 
 	: m_Origin(origin), m_Dir(direction) {}
 
 	constexpr Point<value_type> at(value_type lambda) const noexcept {
@@ -21,7 +21,7 @@ public:
 	[[nodiscard]] constexpr const Vec3<value_type>& direction() const noexcept { return m_Dir; }
 	[[nodiscard]] constexpr const Point<value_type>& origin() const noexcept { return m_Origin; }
 
-	Ray operator()(const Point<value_type>& origin, const Vec3<value_type>& direction) const {
+	constexpr Ray operator()(const Point<value_type>& origin, const Vec3<value_type>& direction) const {
 		return Ray(origin, direction);
 	}
 

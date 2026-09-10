@@ -6,7 +6,7 @@
 class Sphere : public Hittable
 {
 public:
-	Sphere(const rtrc::point3& center, double radius) 
+	constexpr Sphere(const rtrc::point3& center, double radius) 
 	: m_Center(center), m_Radius(std::fmax(0.0, radius)) {}
 
 	bool Hit(const rtrc::ray& r, Interval ray_t, HitRecord& rec) const override {

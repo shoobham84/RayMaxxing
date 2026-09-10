@@ -2,7 +2,7 @@
 
 #include <limits>
 
-constexpr const auto Infinity{ std::numeric_limits<double>::infinity() };
+constexpr auto Infinity{ std::numeric_limits<double>::infinity() };
 
 class Interval {
 public:
@@ -32,9 +32,13 @@ public:
 		return x;
 	}
 
-	static const Interval Empty, Universe;
+	[[nodiscard]] static constexpr Interval Empty() {
+		return Interval(Infinity, -Infinity);
+	}
+
+	[[nodiscard]] static constexpr Interval Universe() {
+		return Interval(-Infinity, Infinity);
+	}
 };
 
-inline const Interval Interval::Empty = Interval(Infinity, -Infinity);
-inline const Interval Interval::Universe = Interval(-Infinity, +Infinity);
 

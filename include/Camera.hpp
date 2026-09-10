@@ -11,7 +11,7 @@ public:
 	static constexpr const int samples_per_pixel { 100 };
 	static constexpr const int max_depth { 50 };
 
-	void Render(const Hittable& world) {
+	constexpr void Render(const Hittable& world) {
 		Initialize();
 
 		std::println("P3\n{} {} \n255\n", image_width, image_height);
@@ -32,16 +32,14 @@ public:
 	}
 
 private:
-	int image_height;
-	double pixelSamplesScale;
+	static constexpr int image_height {std::max( 1, static_cast<int>( image_width / aspectRatio ))};
+	static constexpr double pixelSamplesScale { 1.0 / samples_per_pixel };
 	rtrc::point3 cameraCenter; 
 	rtrc::point3 pixelUL_00_Location;
 	rtrc::Vec3<double> pixelDeltaU;
 	rtrc::Vec3<double> pixelDeltaV;
 
-	void Initialize() {
-		image_height = std::max( 1, static_cast<int>( image_width / aspectRatio ));
-		
+	constexpr void Initialize() {
 		// camera
 		auto focalLength { 1.0 };
 		auto viewportHeight { 2.0 };
@@ -62,14 +60,13 @@ private:
 
 		pixelUL_00_Location = viewportUpperLeft + 0.5 * (pixelDeltaU + pixelDeltaV);
 
-		pixelSamplesScale = 1.0 / samples_per_pixel;
 	}
 
-	rtrc::vec3 sampleSquare() const {
+	constexpr rtrc::vec3 sampleSquare() const {
 		return rtrc::vec3(randomDouble() - 0.5, randomDouble() - 0.5, 0);
 	}
 
-	rtrc::ray getRay(int i, int j) const {
+	constexpr rtrc::ray getRay(int i, int j) const {
 		auto offset { sampleSquare() };
 		auto pixelSample{ pixelUL_00_Location + ((i + offset.x()) * pixelDeltaU) + ((j + offset.y()) * pixelDeltaV) };
 		
@@ -79,7 +76,7 @@ private:
 		return rtrc::ray(rayOrigin, rayDirection);
 	}
 
-	rtrc::color rayColor(const rtrc::ray& ray, int depth, const Hittable& world) {
+	constexpr rtrc::color rayColor(const rtrc::ray& ray, int depth, const Hittable& world) {
 		if (depth <= 0) return rtrc::color(0, 0, 0);
 
 		HitRecord record;
