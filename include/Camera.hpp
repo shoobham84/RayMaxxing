@@ -8,7 +8,8 @@ class Camera {
 public:
 	static constexpr const auto aspectRatio { 16.0 / 9.0 };
 	static constexpr const int image_width { 400 };
-	int samples_per_pixel { 10 };
+	static constexpr const int samples_per_pixel { 100 };
+	static constexpr const int max_depth { 50 };
 
 	void Render(const Hittable& world) {
 		Initialize();
@@ -21,7 +22,7 @@ public:
 				rtrc::color pixelColor(0, 0, 0);
 				for (auto sample{0}; sample < samples_per_pixel; ++sample) {
 					rtrc::ray ray = getRay(i, j);
-					pixelColor += rayColor(ray, world);
+					pixelColor += rayColor(ray, max_depth, world);
 				}
 
 				rtrc::writeColor(std::cout, pixelSamplesScale * pixelColor);
@@ -78,11 +79,13 @@ private:
 		return rtrc::ray(rayOrigin, rayDirection);
 	}
 
-	rtrc::color rayColor(const rtrc::ray& ray, const Hittable& world) {
+	rtrc::color rayColor(const rtrc::ray& ray, int depth, const Hittable& world) {
+		if (depth <= 0) return rtrc::color(0, 0, 0);
+
 		HitRecord record;
 		if (world.Hit(ray, Interval(0, Infinity), record)) {
 			rtrc::vec3 direction { rtrc::random_on_hemisphere(record.Normal) };
-			return 0.7 * rayColor(ray(record.Points, direction), world);
+			return 0.7 * rayColor(ray(record.Points, direction), depth-1, world);
 		}
 
 		rtrc::vec3 unitDir = rtrc::unit_vector(ray.direction());
