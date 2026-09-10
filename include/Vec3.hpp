@@ -6,6 +6,7 @@
 #include <cassert>
 #include <cmath>
 #include <ostream>
+#include "Interval.hpp"
 
 namespace rtrc {
 
@@ -161,12 +162,14 @@ void writeColor(std::ostream& out, const Vec3<Tp>& PixelColor) {
 	auto b{ PixelColor.z() };
 
 	// translate [0,1] to range [0, 255]
-	int rbyte = static_cast<int>(255.999 * r);
-	int gbyte = static_cast<int>(255.999 * g);
-	int bbyte = static_cast<int>(255.999 * b);
+	static constexpr Interval intensity(0.000, 0.999);
+	int rbyte = static_cast<int>(256 * intensity.clamp(r));
+	int gbyte = static_cast<int>(256 * intensity.clamp(g));
+	int bbyte = static_cast<int>(256 * intensity.clamp(b));
 
 	out << rbyte << ' ' << gbyte << ' ' << bbyte << '\n';
 }
+
 
 // ── type aliases ─────────────────────────────────────────────────────
 

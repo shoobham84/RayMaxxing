@@ -8,22 +8,28 @@ class Interval {
 public:
 	double Min, Max;
 
-	Interval() 
+	constexpr Interval() 
 	: Min(-Infinity), Max(Infinity) {}
 
-	Interval(double min, double max) 
+	constexpr Interval(double min, double max) 
 	: Min(min), Max(max) {}
 
-	double size() {
+	[[nodiscard]] constexpr double size() {
 		return Max - Min;
 	}
 
-	bool contains(double x) {
+	[[nodiscard]] constexpr bool contains(double x) {
 		return Min <= x && Max >= x;
 	}
 
-	bool surrounds(double x) {
+	[[nodiscard]] constexpr bool surrounds(double x) {
 		return Min < x && Max > x;
+	}
+
+	[[nodiscard]] constexpr double clamp(double x) const {
+		if (x < Min) return Min;
+		else if (x > Max) return Max;
+		return x;
 	}
 
 	static const Interval Empty, Universe;
