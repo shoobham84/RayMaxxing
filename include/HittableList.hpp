@@ -9,16 +9,16 @@ public:
 	std::vector<std::shared_ptr<Hittable>> objects;
 	
 	HittableList() = default;
-	HittableList(std::shared_ptr<Hittable> object) {
-		add(object);
+	HittableList(std::shared_ptr<Hittable> object) noexcept {
+		add(std::move(object));
 	}
 
 	void clear() {
 		objects.clear();
 	}
 
-	constexpr void add(std::shared_ptr<Hittable> obj) {
-		objects.emplace_back(obj);
+	void add(std::shared_ptr<Hittable> obj) noexcept {
+		objects.emplace_back(std::move(obj));
 	}
 
 	bool Hit(const rtrc::ray& ray, Interval ray_t, HitRecord& record) const override {

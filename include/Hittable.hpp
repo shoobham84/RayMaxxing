@@ -19,7 +19,7 @@ public:
 
 class Hittable {
 public:
-	virtual ~Hittable() = default;
+	virtual ~Hittable() noexcept = default;
 
 	virtual bool Hit(const rtrc::ray& ray, Interval ray_t, HitRecord& record) const = 0;
 };
