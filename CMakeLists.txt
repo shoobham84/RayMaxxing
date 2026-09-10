@@ -29,5 +29,6 @@ else()
 	-Wpedantic
 	-Wreorder
 	-Wnon-virtual-dtor
+	-Wshadow
 )
 endif()

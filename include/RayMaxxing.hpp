@@ -2,7 +2,6 @@
 
 #include <cmath>
 #include <print>
-#include <limits>
 #include <memory>
 #include <concepts>
 #include "Interval.hpp"
