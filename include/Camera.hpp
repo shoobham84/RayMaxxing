@@ -83,7 +83,7 @@ private:
 		if (depth <= 0) return rtrc::color(0, 0, 0);
 
 		HitRecord record;
-		if (world.Hit(ray, Interval(0, Infinity), record)) {
+		if (world.Hit(ray, Interval(0.001, Infinity), record)) {
 			rtrc::vec3 direction { rtrc::random_on_hemisphere(record.Normal) };
 			return 0.7 * rayColor(ray(record.Points, direction), depth-1, world);
 		}
