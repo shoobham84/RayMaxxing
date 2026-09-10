@@ -21,6 +21,10 @@ public:
 	[[nodiscard]] constexpr const Vec3<value_type>& direction() const noexcept { return m_Dir; }
 	[[nodiscard]] constexpr const Point<value_type>& origin() const noexcept { return m_Origin; }
 
+	Ray operator()(const Point<value_type>& origin, const Vec3<value_type>& direction) const {
+		return Ray(origin, direction);
+	}
+
 private:
 	Point<value_type> m_Origin;
 	Vec3<value_type> m_Dir;

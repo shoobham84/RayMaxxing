@@ -6,7 +6,7 @@
 #include <cassert>
 #include <cmath>
 #include <ostream>
-#include "Interval.hpp"
+#include "RayMaxxing.hpp"
 
 namespace rtrc {
 
@@ -83,6 +83,14 @@ public:
 		return *this *= static_cast<value_type>(1) / static_cast<value_type>(scalar);
 	}
 
+	constexpr static Vec3 random() {
+		return Vec3(randomDouble(), randomDouble(), randomDouble());
+	}
+
+	constexpr static Vec3 random(double min, double max) {
+		return Vec3(randomDouble(min, max), randomDouble(min, max), randomDouble(min, max));
+	}
+
 private:
 	constexpr static size_t m_DataSize{ 3 };
 
@@ -153,6 +161,27 @@ template<std::floating_point Tp>
 	return v / v.length();
 }
 
+template<std::floating_point Tp>
+constexpr Vec3<Tp> random_unit_vector() {
+	while(1) {
+		auto P { Vec3<Tp>::random(-1, 1)};
+		auto len_sq { P.length_squared() };
+		if ( 1e-160 < len_sq && len_sq<= 1) {
+			return P / sqrt(len_sq);
+		}
+	}
+}
+
+template<std::floating_point Tp>
+constexpr Vec3<Tp> random_on_hemisphere(const Vec3<Tp>& normal) {
+	Vec3<Tp> onUnitSphere { random_unit_vector<Tp>() };
+	if (dot(onUnitSphere, normal) > 0) 
+		return onUnitSphere;
+	else
+		return -onUnitSphere;
+}
+
+
 // ── color helper ─────────────────────────────────────────────────────
 
 template<std::floating_point Tp>
@@ -169,6 +198,8 @@ void writeColor(std::ostream& out, const Vec3<Tp>& PixelColor) {
 
 	out << rbyte << ' ' << gbyte << ' ' << bbyte << '\n';
 }
+
+
 
 
 // ── type aliases ─────────────────────────────────────────────────────

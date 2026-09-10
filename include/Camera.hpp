@@ -81,7 +81,8 @@ private:
 	rtrc::color rayColor(const rtrc::ray& ray, const Hittable& world) {
 		HitRecord record;
 		if (world.Hit(ray, Interval(0, Infinity), record)) {
-			return 0.5 * (record.Normal + rtrc::color(1,1,1));
+			rtrc::vec3 direction { rtrc::random_on_hemisphere(record.Normal) };
+			return 0.7 * rayColor(ray(record.Points, direction), world);
 		}
 
 		rtrc::vec3 unitDir = rtrc::unit_vector(ray.direction());
