@@ -81,7 +81,7 @@ private:
 
 		HitRecord record;
 		if (world.Hit(ray, Interval(0.001, Infinity), record)) {
-			rtrc::vec3 direction { rtrc::random_on_hemisphere(record.Normal) };
+			rtrc::vec3 direction { record.Normal + rtrc::random_unit_vector<double>() };
 			return 0.7 * rayColor(ray(record.Points, direction), depth-1, world);
 		}
 
