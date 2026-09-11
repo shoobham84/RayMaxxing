@@ -184,11 +184,21 @@ constexpr Vec3<Tp> random_on_hemisphere(const Vec3<Tp>& normal) {
 
 // ── color helper ─────────────────────────────────────────────────────
 
+constexpr auto linearToGamma(double linearComp) {
+	if (linearComp > 0) return std::sqrt(linearComp);
+
+	return 0.0;
+}
+
 template<std::floating_point Tp>
 void writeColor(std::ostream& out, const Vec3<Tp>& PixelColor) {
 	auto r{ PixelColor.x() };
 	auto g{ PixelColor.y() };
 	auto b{ PixelColor.z() };
+
+	r = linearToGamma(r);
+	g = linearToGamma(g);
+	b = linearToGamma(b);
 
 	// translate [0,1] to range [0, 255]
 	static constexpr Interval intensity(0.000, 0.999);
