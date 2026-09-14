@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Vec3.hpp"
+#include "Point.hpp"
+#include "VecOps.hpp"
 
 namespace rtrc {
 

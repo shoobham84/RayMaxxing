@@ -27,3 +27,6 @@ constexpr double randomDouble(double min, double max) {
 
 #include "Ray.hpp"
 #include "Vec3.hpp"
+#include "Color.hpp"
+#include "Point.hpp"
+#include "VecOps.hpp"
